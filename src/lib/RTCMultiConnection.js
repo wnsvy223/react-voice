@@ -3,7 +3,7 @@ import hark from 'hark';
 
 const connection = new RTCMultiConnection();
 
-connection.socketURL = "https://ttaallkk.herokuapp.com:443/"; // 시그널링 서버 URL
+connection.socketURL = process.env.SIGNAL_SERVER_URL; // 시그널링 서버 URL
 
 // Set video directions and media types
 connection.session = {
@@ -70,7 +70,7 @@ connection.onopen = (event) => {
 };
 
 connection.onmessage = (event) => {
-    console.log(JSON.stringify(event));
+    //console.log(JSON.stringify(event));
     switch(event.data.type){
         case 'speaking':
             //console.log(`스피크 ${event.data}`);

@@ -4,7 +4,7 @@ import { withStyles, makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { purple } from '@material-ui/core/colors';
-
+import { UserList } from './List';
 
 const ColorButton = withStyles((theme) => ({
     root: {
@@ -149,7 +149,7 @@ const RoomForm = () => {
         <form className={classes.root} noValidate autoComplete="off">
             <TextField name="userName" label="사용자 이름" variant="outlined" value={userName} onChange={onChange} />
             <TextField name="roomName" label="방제목" variant="outlined" value={roomName} onChange={onChange} />
-            <TextField name="password" label="비번" variant="outlined" value={password} onChange={onChange} />
+            <TextField name="password" label="비밀번호" variant="outlined" value={password} onChange={onChange} />
         </form>
         <div>
             <ColorButton className={classes.btn} variant="contained" color="primary" onClick={openRoom}>방만들기</ColorButton>
