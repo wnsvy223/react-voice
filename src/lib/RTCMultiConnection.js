@@ -5,11 +5,6 @@ const connection = new RTCMultiConnection();
 
 connection.socketURL = "https://ttaallkk.herokuapp.com:443/"; // 시그널링 서버 URL
 
-connection.autoCreateMediaElement = false; // 미디어 엘리먼트 자동생성 X(default media element의 경우 unmute시 echo 이슈)
-connection.enableFileSharing = true; // 파일 공유 세팅
-connection.chunkSize = 60 * 1000; // ChunkSize
-connection.autoSaveToDisk = false;  // to make sure file-saver dialog is not invoked.
-
 // Set video directions and media types
 connection.session = {
     video: false,
