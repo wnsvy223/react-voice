@@ -50,10 +50,10 @@ connection.iceServers.push({
 });
 
 // turn server
-connection.iceServers.push({ // own viagenie turn server
-    urls: 'turn:numb.viagenie.ca',
-    username: 'wnsvy223@naver.com',
-    credential: 'dlsvygud223@'
+connection.iceServers.push({
+    urls: process.env.REACT_APP_TURN_SERVER_URL,
+    username: process.env.REACT_APP_TURN_USERNAME,
+    credential: process.env.REACT_APP_TURN_CREDENTIAL
 });
 
 connection.onstream = function(event) {
