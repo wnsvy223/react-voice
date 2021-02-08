@@ -3,7 +3,7 @@ import hark from 'hark';
 
 const connection = new RTCMultiConnection();
 
-connection.socketURL = process.env.SIGNAL_SERVER_URL; // 시그널링 서버 URL
+connection.socketURL = process.env.REACT_APP_SIGNAL_SERVER_URL; // 시그널링 서버 URL
 
 // Set video directions and media types
 connection.session = {
