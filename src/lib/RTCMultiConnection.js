@@ -1,5 +1,4 @@
 import RTCMultiConnection from 'rtcmulticonnection';
-import hark from 'hark';
 
 const connection = new RTCMultiConnection();
 
@@ -55,57 +54,5 @@ connection.iceServers.push({
     username: process.env.REACT_APP_TURN_USERNAME,
     credential: process.env.REACT_APP_TURN_CREDENTIAL
 });
-
-connection.onstream = function(event) {
-    console.log(JSON.stringify(event));
-    initHark({
-        stream: event.stream,
-        event: event,
-        connection: connection,
-    });
-}
-
-connection.onopen = (event) => {
-    console.log(JSON.stringify(event));
-};
-
-connection.onmessage = (event) => {
-    //console.log(JSON.stringify(event));
-    switch(event.data.type){
-        case 'speaking':
-            //console.log(`스피크 ${event.data}`);
-            break;
-        case 'silence':
-            //console.log(`사일런스 ${event.data}`);
-            break;
-        default:
-    } 
-};
-
-function initHark(args){
-    if(!window.hark){
-        throw new Error('Please link hark.js');
-    }
-
-    var connection = args.connection;
-    var event = args.event;
-    var stream = args.stream;
-    var options = {};
-    var speechEvents = new hark(stream, options); // hark.js 초기화
-    
-    speechEvents.on('speaking', () => {
-        connection.send({
-            userid : event.userid,
-            type : "speaking"
-        });
-    });
-
-    speechEvents.on('stopped_speaking', () =>{
-        connection.send({
-            userid : event.userid,
-            type : "silence"
-        });
-    });
-}
 
 export default connection;
