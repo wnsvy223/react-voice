@@ -28,7 +28,10 @@ const useStyles = makeStyles((theme) => ({
 const UserList = () => {
   const classes = useStyles();
   const [participants, setParticipants] = useState([]);
-  const [speak, setSpeak] = useState(false);
+  const [speak, setSpeak] = useState({
+    userid: '',
+    isSpeak: false
+  });
 
   useEffect(() => {
     connection.onstream = (event) => {
@@ -45,15 +48,18 @@ const UserList = () => {
     };
 
     connection.onmessage = (event) => {
-      //console.log(JSON.stringify(event));
       switch(event.data.type){
           case 'speaking':
-              //console.log(`스피크 ${JSON.stringify(event.data)}`);
-              setSpeak(true);
+              setSpeak({
+                userid: event.data.userid,
+                isSpeak: true
+              });
               break;
           case 'silence':
-              //console.log(`사일런스 ${JSON.stringify(event.data)}`);
-              setSpeak(false);
+              setSpeak({
+                userid: event.data.userid,
+                isSpeak: false
+              });
               break;
           default:
       } 
@@ -64,17 +70,16 @@ const UserList = () => {
     };
   }, []);
 
-  if (participants.length <= 0) return <div className={classes.userList}>대화에 참가한 유저가 없습니다.</div>;
-
   return (
     <List dense className={classes.userList}>
+      {participants.length <= 0 && `대화에 참가한 유저가 없습니다.`}
       {participants.map((user) => {
         const labelId = `checkbox-list-secondary-label-${user.userid}`;
         return (
           <ListItem key={user.userid} button>
             <ListItemAvatar>
               <Avatar
-                className={speak ? classes.speak : classes.silence}
+                className={speak.isSpeak === true && speak.userid === user.userid ? classes.speak : classes.silence}
                 alt={`Avatar n°${user.extra.userName}`}
                 src={`/static/images/avatar/${user.extra.userName}.jpg`}
               />
