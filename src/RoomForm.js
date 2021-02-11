@@ -43,13 +43,14 @@ const useStyles = makeStyles((theme) => ({
 const RoomForm = () => {
     const classes = useStyles();
 
+    const [isOnAir, setIsOnAir] = useState(false);
     const [input, setInput] = useState({
         userName: '',
         roomName: '',
         password: '',
         showPassword: false,
     });
-    const {userName, roomName, password} = input;
+    const {userName, roomName, password, showPassword} = input; // Object Destructuring(객체의 요소값들을 키값으로 접근가능)
     
     const onChange = e => {
         const {name, value} = e.target;
@@ -64,7 +65,7 @@ const RoomForm = () => {
     };
 
     const handleClickShowPassword = () => {
-        setInput({ ...input, showPassword: !input.showPassword });
+        setInput({ ...input, showPassword: !showPassword });
     };
 
     const handleMouseDownPassword = (event) => {
@@ -89,7 +90,8 @@ const RoomForm = () => {
                 }else{
                     connection.open(roomName, (isRoomOpened, roomid, error) => {
                         if(isRoomOpened && !error){
-                            console.log(`방생성 완료 : ${roomid}`);
+                            setIsOnAir(true);
+                            console.log(input);
                         }else{
                             console.error('방 생성 오류 :' + error);
                         }   
@@ -131,7 +133,7 @@ const RoomForm = () => {
                                 default:
                             }
                         }else{
-                            console.log(`참가성공 : ${roomid}`);
+                            setIsOnAir(true);
                         }
                     });
                 }else{
@@ -156,40 +158,43 @@ const RoomForm = () => {
         connection.getAllParticipants().forEach((pid) => {
             connection.disconnectWith(pid);
         });
+        setIsOnAir(false);
     }
 
     return (
       <div>
-        <form className={clsx(classes.inputForm, classes.center)} noValidate autoComplete="off">
-            <TextField name="userName" label="닉네임" size="small" variant="outlined" value={userName} onChange={onChange} />
-            <TextField name="roomName" label="방제목" size="small" variant="outlined" value={roomName} onChange={onChange} />
-            <FormControl className={clsx(classes.margin, classes.textField)} size="small" variant="outlined">
-                <InputLabel htmlFor="outlined-adornment-password">비밀번호</InputLabel>
-                <OutlinedInput
-                    id="outlined-adornment-password"
-                    type={input.showPassword ? 'text' : 'password'}
-                    value={input.password}
-                    onChange={handlePasswordChange('password')}
-                    endAdornment={
-                    <InputAdornment position="end">
-                        <IconButton
-                        aria-label="toggle password visibility"
-                        onClick={handleClickShowPassword}
-                        onMouseDown={handleMouseDownPassword}
-                        edge="end"
-                        >
-                        {input.showPassword ? <Visibility /> : <VisibilityOff />}
-                        </IconButton>
-                    </InputAdornment>
-                    }
-                    labelWidth={70}
-                />
-            </FormControl>
-        </form>
+        {!isOnAir && 
+            <form className={clsx(classes.inputForm, classes.center)} noValidate autoComplete="off">
+                <TextField name="userName" label="닉네임" size="small" variant="outlined" value={userName} onChange={onChange} />
+                <TextField name="roomName" label="방제목" size="small" variant="outlined" value={roomName} onChange={onChange} />
+                <FormControl className={clsx(classes.margin, classes.textField)} size="small" variant="outlined">
+                    <InputLabel htmlFor="outlined-adornment-password">비밀번호</InputLabel>
+                    <OutlinedInput
+                        id="outlined-adornment-password"
+                        type={showPassword ? 'text' : 'password'}
+                        value={password}
+                        onChange={handlePasswordChange('password')}
+                        endAdornment={
+                        <InputAdornment position="end">
+                            <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={handleClickShowPassword}
+                            onMouseDown={handleMouseDownPassword}
+                            edge="end"
+                            >
+                            {showPassword ? <Visibility /> : <VisibilityOff />}
+                            </IconButton>
+                        </InputAdornment>
+                        }
+                        labelWidth={70}
+                    />
+                </FormControl>
+            </form>
+        }
         <div className={classes.center}>
-            <ColorButton className={classes.btn} variant="contained" color="primary" onClick={openRoom}>방만들기</ColorButton>
-            <ColorButton className={classes.btn} variant="contained" color="primary" onClick={joinRoom}>방참가</ColorButton>
-            <ColorButton className={classes.btn} variant="contained" color="primary" onClick={closeRoom}>종료</ColorButton>
+            {!isOnAir && <ColorButton className={classes.btn} variant="contained" color="primary" onClick={openRoom}>방만들기</ColorButton>}
+            {!isOnAir && <ColorButton className={classes.btn} variant="contained" color="primary" onClick={joinRoom}>방참가</ColorButton>}
+            {isOnAir && <ColorButton className={classes.btn} variant="contained" color="primary" onClick={closeRoom}>종료</ColorButton>}     
         </div>
       </div>
     );
