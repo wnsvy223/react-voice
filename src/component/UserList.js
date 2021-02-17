@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
-import connection from './lib/RTCMultiConnection';
-import initHark from './lib/Hark';
+import { green } from '@material-ui/core/colors';
+import connection from '../lib/RTCMultiConnection';
+import initHark from '../lib/Hark';
 
 const useStyles = makeStyles((theme) => ({
   listItem: {
@@ -22,6 +24,9 @@ const useStyles = makeStyles((theme) => ({
   },
   silence:{
     border: '0'
+  },
+  avatarDefault:{
+    backgroundColor: green[500]
   }
 }));
 
@@ -72,16 +77,16 @@ const UserList = () => {
 
   return (
     <List dense className={classes.userList}>
-      {participants.length <= 0 && `대화에 참가한 유저가 없습니다.`}
+      {participants.length <= 0 && `대화 참가자가 없습니다.`}
       {participants.map((user) => {
         const labelId = `checkbox-list-secondary-label-${user.userid}`;
         return (
           <ListItem key={user.userid} button>
             <ListItemAvatar>
               <Avatar
-                className={speak.isSpeak === true && speak.userid === user.userid ? classes.speak : classes.silence}
-                alt={`Avatar n°${user.extra.userName}`}
-                src={`/static/images/avatar/${user.extra.userName}.jpg`}
+                className={clsx(classes.avatarDefault, (speak.isSpeak === true && speak.userid === user.userid) ? classes.speak : classes.silence)}
+                alt={`${user.extra.userName}`}
+                src={`${user.extra.userProfile}`}
               />
             </ListItemAvatar>
             <ListItemText id={labelId} primary={`${user.extra.userName}`} />

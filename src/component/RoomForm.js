@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import connection from './lib/RTCMultiConnection';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import { purple } from '@material-ui/core/colors';
+import { blue } from '@material-ui/core/colors';
 import clsx from 'clsx';
 import IconButton from '@material-ui/core/IconButton';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
@@ -12,13 +11,14 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import FormControl from '@material-ui/core/FormControl';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import connection from '../lib/RTCMultiConnection';
 
 const ColorButton = withStyles((theme) => ({
     root: {
-      color: theme.palette.getContrastText(purple[500]),
-      backgroundColor: purple[500],
+      color: theme.palette.getContrastText(blue[500]),
+      backgroundColor: blue[500],
       '&:hover': {
-        backgroundColor: purple[700],
+        backgroundColor: blue[700],
       },
     },
 }))(Button);
@@ -91,7 +91,6 @@ const RoomForm = () => {
                     connection.open(roomName, (isRoomOpened, roomid, error) => {
                         if(isRoomOpened && !error){
                             setIsOnAir(true);
-                            console.log(input);
                         }else{
                             console.error('방 생성 오류 :' + error);
                         }   
