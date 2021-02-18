@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { makeStyles, createStyles, useTheme } from "@material-ui/core/styles";
+import { makeStyles, withStyles, createStyles, useTheme } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
@@ -9,11 +9,14 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import Avatar from '@material-ui/core/Avatar';
+import Badge from '@material-ui/core/Badge';
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import MailIcon from "@material-ui/icons/Mail";
+import FolderIcon from '@material-ui/icons/Folder';
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import clsx from "clsx";
 import { blue } from '@material-ui/core/colors';
@@ -56,6 +59,7 @@ const useStyles = makeStyles((theme) =>
     },
     drawerPaper: {
         width: drawerWidth,
+        //background: "linear-gradient(45deg, #0396FF 30%, #0396FF 90%)",
     },
     drawerHeader: {
         display: "flex",
@@ -83,6 +87,22 @@ const useStyles = makeStyles((theme) =>
     },
   })
 );
+
+const StyledBadge = withStyles((theme) => ({
+    badge: {
+      backgroundColor: '#44b700',
+      color: '#44b700',
+      boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+      '&::after': {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        borderRadius: '50%',
+      },
+    }
+}))(Badge);
 
 function ResponsiveDrawer() {
     const classes = useStyles();
@@ -134,6 +154,20 @@ function ResponsiveDrawer() {
             }}
         >
             <div className={classes.drawerHeader}>
+            <ListItem>
+                <ListItemAvatar>
+                    <StyledBadge
+                        overlap="circle"
+                        anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'right',
+                        }}
+                        variant="dot">
+                        <Avatar className={clsx(classes.avatarDefault)}  alt="프로필" src="/" />
+                    </StyledBadge>
+                </ListItemAvatar>
+                <ListItemText primary="아이디" secondary="정보" />
+            </ListItem>
             <IconButton onClick={() => handleToggleSidebar(false)}>
                 {theme.direction === "ltr" ? (
                 <ChevronLeftIcon />
@@ -144,26 +178,16 @@ function ResponsiveDrawer() {
             </div>
             <Divider />
             <List>
-            {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
+            {["메뉴1", "메뉴2", "메뉴3"].map((text, index) => (
                 <ListItem button key={text}>
                 <ListItemIcon>
-                    <MailIcon />
+                    <FolderIcon />
                 </ListItemIcon>
                 <ListItemText primary={text} />
                 </ListItem>
             ))}
             </List>
             <Divider />
-            <List>
-            {["All mail", "Trash", "Spam"].map((text, index) => (
-                <ListItem button key={text}>
-                <ListItemIcon>
-                    <MailIcon />
-                </ListItemIcon>
-                <ListItemText primary={text} />
-                </ListItem>
-            ))}
-            </List>
             <UserList></UserList>
         </Drawer>
         <main

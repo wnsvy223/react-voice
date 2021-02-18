@@ -123,7 +123,6 @@ export default function SignInSide() {
               type="button"
               fullWidth
               variant="contained"
-              
               className={classes.submit}
               onClick={handleSignIn}
             >

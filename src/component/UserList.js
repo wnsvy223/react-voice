@@ -26,8 +26,11 @@ const useStyles = makeStyles((theme) => ({
     border: '0'
   },
   avatarDefault:{
-    backgroundColor: green[500]
-  }
+    backgroundColor: green[500],
+    width: theme.spacing(3),
+    height: theme.spacing(3),
+    fontSize: "13px"
+  },
 }));
 
 const UserList = () => {
@@ -84,7 +87,7 @@ const UserList = () => {
           <ListItem key={user.userid} button>
             <ListItemAvatar>
               <Avatar
-                className={clsx(classes.avatarDefault, (speak.isSpeak === true && speak.userid === user.userid) ? classes.speak : classes.silence)}
+                className={clsx(classes.avatarDefault, classes.small, (speak.isSpeak === true && speak.userid === user.userid) ? classes.speak : classes.silence)}
                 alt={`${user.extra.userName}`}
                 src={`${user.extra.userProfile}`}
               />
