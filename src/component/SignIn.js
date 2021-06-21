@@ -97,7 +97,8 @@ export default function SignInSide() {
       {
         headers:{
           'Content-type': 'application/json'
-        }
+        },
+        withCredentials: true
       }
     )
     .then((response) => {
@@ -115,28 +116,28 @@ export default function SignInSide() {
 
   const handleSignIn = () => {
     console.log(`로그인 요청 : ${email} // ${pw} // ${process.env.REACT_APP_PROD_SERVER_URL}`);
-    fetch(process.env.REACT_APP_PROD_SERVER_URL + "/api/login", {
-      headers: {
-        'content-type': 'application/json',
-      },
-      method: 'POST',
-      credentials: 'include',
-      body: JSON.stringify({
+    axios.post(process.env.REACT_APP_PROD_SERVER_URL + "/api/login",
+      {
         email: email,
         password: pw
-      })
-    })
-    .then((res) => res.json())
+      },
+      {
+        headers:{
+          'Content-type': 'application/json'
+        },
+        withCredentials: true
+      },
+    )
     .then((response) => {
       if(response.status === 200){
+        console.log('로그인 응답 : ' + JSON.stringify(response));
         history.push({
           pathname: '/dashboard'
         });
-        console.log('로그인 응답 : ' + JSON.stringify(response));
       }
     })
-    .catch((err) => {
-        console.log('로그인 오류 : ' + err);
+    .catch((err) => {;
+      console.log('로그인 오류! :' + err);
     });
   }
 
