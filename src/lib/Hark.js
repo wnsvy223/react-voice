@@ -14,14 +14,16 @@ const initHark = (args) => {
     speechEvents.on('speaking', () => {
         connection.send({
             userid : event.userid,
-            type : "speaking"
+            type : "speaking",
+            isSpeak: true
         });
     });
   
     speechEvents.on('stopped_speaking', () => {
         connection.send({
             userid : event.userid,
-            type : "silence"
+            type : "silence",
+            isSpeak: false
         });
     });
 }

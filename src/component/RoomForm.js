@@ -13,6 +13,7 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import Grid from '@material-ui/core/Grid';
 import connection from '../lib/RTCMultiConnection';
+import axios from 'axios';
 
 const ColorButton = withStyles((theme) => ({
     root: {
@@ -162,6 +163,21 @@ const RoomForm = () => {
         setIsOnAir(false);
     }
 
+    const test = () => {
+        axios.post(process.env.REACT_APP_PROD_SERVER_URL + "/api/refreshToken", 
+        { 
+            "grantType":"refreshToken", 
+            "email":"wnsvy223@naver.com" }, 
+            { withCredentials: true}
+        )
+        .then((response) => {
+            console.log('응답 : ' + JSON.stringify(response));
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+    }
+
     return (
         <Fragment>
             {!isOnAir && 
@@ -199,6 +215,7 @@ const RoomForm = () => {
                 </Grid>
             }
             <div className={classes.center}>
+                <ColorButton className={classes.btn} variant="contained" color="primary" onClick={test}>테스트</ColorButton>
                 {!isOnAir && <ColorButton className={classes.btn} variant="contained" color="primary" onClick={openRoom}>방만들기</ColorButton>}
                 {!isOnAir && <ColorButton className={classes.btn} variant="contained" color="primary" onClick={joinRoom}>방참가</ColorButton>}
                 {isOnAir && <ColorButton className={classes.btn} variant="contained" color="primary" onClick={closeRoom}>종료</ColorButton>}     

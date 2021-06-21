@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
 import { useHistory } from "react-router-dom";
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -73,10 +74,69 @@ const ColorButton = withStyles((theme) => ({
 export default function SignInSide() {
   const classes = useStyles();
   const history = useHistory();
+  const [ email, setEmail ] = useState('');
+  const [ pw, setPw ] = useState('');
+
+  const onEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const onPwChange = (e) => {
+    setPw(e.target.value);
+  };
+
+ 
+  const handleSignUp = () => {
+    console.log(`회원가입 요청 : ${email} // ${pw} // ${process.env.REACT_APP_PROD_SERVER_URL}`);
+    axios.post(process.env.REACT_APP_PROD_SERVER_URL + "/api/signUp",
+      {
+        email: email,
+        password: pw,
+        displayName:"<테스트맨>"
+      },
+      {
+        headers:{
+          'Content-type': 'application/json'
+        }
+      }
+    )
+    .then((response) => {
+      if(response.status === 200){
+        console.log('회원가입 응답 : ' + JSON.stringify(response));
+        history.push({
+          pathname: '/dashboard'
+        });
+      }
+    })
+    .catch((err) => {;
+      console.log('회원가입 오류! :' + err);
+    });
+  }
 
   const handleSignIn = () => {
-    history.push({
-      pathname: '/dashboard'
+    console.log(`로그인 요청 : ${email} // ${pw} // ${process.env.REACT_APP_PROD_SERVER_URL}`);
+    fetch(process.env.REACT_APP_PROD_SERVER_URL + "/api/login", {
+      headers: {
+        'content-type': 'application/json',
+      },
+      method: 'POST',
+      credentials: 'include',
+      body: JSON.stringify({
+        email: email,
+        password: pw
+      })
+    })
+    .then((res) => res.json())
+    .then((response) => {
+      if(response.status === 200){
+        history.push({
+          pathname: '/dashboard'
+        });
+        console.log('로그인 응답 : ' + JSON.stringify(response));
+      }
+    })
+    .catch((err) => {
+        console.log('로그인 오류 : ' + err);
     });
   }
 
@@ -103,6 +163,7 @@ export default function SignInSide() {
               name="email"
               autoComplete="email"
               autoFocus
+              onChange={onEmailChange} value={email}
             />
             <TextField
               variant="outlined"
@@ -114,6 +175,7 @@ export default function SignInSide() {
               type="password"
               id="password"
               autoComplete="current-password"
+              onChange={onPwChange} value={pw}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
@@ -127,6 +189,15 @@ export default function SignInSide() {
               onClick={handleSignIn}
             >
               로그인
+            </ColorButton>
+            <ColorButton
+              type="button"
+              fullWidth
+              variant="contained"
+              className={classes.submit}
+              onClick={handleSignUp}
+            >
+              회원가입
             </ColorButton>
             <Grid container>
               <Grid item xs>
