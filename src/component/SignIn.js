@@ -15,7 +15,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import { blue } from '@material-ui/core/colors';
-import cookie from 'react-cookies'
+
 
 function Copyright() {
   return (
@@ -134,7 +134,6 @@ export default function SignInSide() {
           pathname: '/dashboard'
         });
         console.log('로그인 응답 : ' + JSON.stringify(response));
-        console.log('쿠키값 : ' + cookie.load("accessToken"))
       }
     })
     .catch((err) => {
